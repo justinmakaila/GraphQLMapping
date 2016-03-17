@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+    <entity name="Cat" parentEntity="Pet" syncable="YES"/>
+    <entity name="Dog" parentEntity="Pet" syncable="YES"/>
+    <entity name="Pet" isAbstract="YES" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="pets" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pet" inverseName="owner" inverseEntity="Pet" syncable="YES">
+            <userInfo>
+                <entry key="GraphQL.RelayConnection" value="true"/>
+            </userInfo>
+        </relationship>
+        <userInfo>
+            <entry key="GraphQL.FieldName" value="user"/>
+        </userInfo>
+    </entity>
+    <elements>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="Pet" positionX="-54" positionY="-9" width="128" height="75"/>
+        <element name="Cat" positionX="-36" positionY="9" width="128" height="45"/>
+        <element name="Dog" positionX="-18" positionY="27" width="128" height="45"/>
+    </elements>
+</model>

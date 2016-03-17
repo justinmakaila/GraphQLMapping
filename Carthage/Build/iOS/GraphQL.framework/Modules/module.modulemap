@@ -1,0 +1,10 @@
+framework module GraphQL {
+  umbrella header "GraphQL.h"
+
+  export *
+  module * { export * }
+}
+
+module GraphQL.Swift {
+    header "GraphQL-Swift.h"
+}
