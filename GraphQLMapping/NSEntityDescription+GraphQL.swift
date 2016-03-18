@@ -21,13 +21,13 @@ private enum MappingKeys: String {
 }
 
 extension NSPropertyDescription {
-    var graphQLPropertyName: String {
+    public var graphQLPropertyName: String {
         return userInfo?[MappingKeys.FieldName.rawValue] as? String ?? remotePropertyName
     }
 }
 
 extension NSRelationshipDescription: GraphQLRelationshipMapping {
-    var graphQLRelayConnection: Bool {
+    public var graphQLRelayConnection: Bool {
         return userInfo?[MappingKeys.RelayConnection.rawValue] != nil
     }
 }
