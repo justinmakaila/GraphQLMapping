@@ -3,11 +3,6 @@ import GraphQL
 import RemoteMapping
 
 
-public enum RelationshipType: Int {
-    case None
-    case Array
-}
-
 /// Mapping for GraphQL Relationships
 protocol GraphQLRelationshipMapping {
     var graphQLRelayConnection: Bool { get }

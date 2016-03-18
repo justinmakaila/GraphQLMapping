@@ -20,6 +20,8 @@
 		7C47C39F1C9B1C44005ACF99 /* RemoteMapping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47C39E1C9B1C44005ACF99 /* RemoteMapping.framework */; };
 		7C47C3A11C9B1C4E005ACF99 /* RemoteMapping.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7C47C39E1C9B1C44005ACF99 /* RemoteMapping.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C47C3A41C9B2240005ACF99 /* NSRelationshipDescriptionMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47C3A31C9B2240005ACF99 /* NSRelationshipDescriptionMappingTests.swift */; };
+		7C47C3B21C9C473D005ACF99 /* ISO8601.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C47C3B11C9C473D005ACF99 /* ISO8601.framework */; };
+		7C47C3B31C9C4746005ACF99 /* ISO8601.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7C47C3B11C9C473D005ACF99 /* ISO8601.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				7C47C3B31C9C4746005ACF99 /* ISO8601.framework in CopyFiles */,
 				7C47C3A11C9B1C4E005ACF99 /* RemoteMapping.framework in CopyFiles */,
 				7C47C39D1C9B1C39005ACF99 /* GraphQL.framework in CopyFiles */,
 			);
@@ -61,6 +64,7 @@
 		7C47C39A1C9B1B38005ACF99 /* GraphQLMappingTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphQLMappingTestCase.swift; sourceTree = "<group>"; };
 		7C47C39E1C9B1C44005ACF99 /* RemoteMapping.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RemoteMapping.framework; path = Carthage/Build/iOS/RemoteMapping.framework; sourceTree = "<group>"; };
 		7C47C3A31C9B2240005ACF99 /* NSRelationshipDescriptionMappingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRelationshipDescriptionMappingTests.swift; sourceTree = "<group>"; };
+		7C47C3B11C9C473D005ACF99 /* ISO8601.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ISO8601.framework; path = Carthage/Build/iOS/ISO8601.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,7 @@
 			files = (
 				7C47C37D1C9B11F1005ACF99 /* GraphQLMapping.framework in Frameworks */,
 				7C47C39F1C9B1C44005ACF99 /* RemoteMapping.framework in Frameworks */,
+				7C47C3B21C9C473D005ACF99 /* ISO8601.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +134,7 @@
 		7C47C3941C9B1373005ACF99 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				7C47C3B11C9C473D005ACF99 /* ISO8601.framework */,
 				7C47C39E1C9B1C44005ACF99 /* RemoteMapping.framework */,
 				7C47C3921C9B12C7005ACF99 /* Cartfile */,
 				7C47C3951C9B1390005ACF99 /* GraphQL.framework */,
