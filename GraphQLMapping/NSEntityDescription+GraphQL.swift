@@ -34,7 +34,7 @@ extension NSRelationshipDescription: GraphQLRelationshipMapping {
 
 extension NSEntityDescription: GraphQLEntity {
     public var fieldName: String {
-        return userInfo?[MappingKeys.FieldName.rawValue] as? String ?? name!.lowercaseString
+        return userInfo?[MappingKeys.FieldName.rawValue] as? String ?? managedObjectClassName.lowercaseString
     }
     
     public var collectionName: String {
