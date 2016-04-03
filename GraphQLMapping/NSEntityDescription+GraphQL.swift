@@ -49,8 +49,11 @@ extension NSEntityDescription: GraphQLEntity {
 public extension NSEntityDescription {
     /// Returns a selection set representing the entity.
     /// If `parent` is provided, this method will not include any properties which reference the parent.
-    func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Array) -> GraphQL.SelectionSet {
+    func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Array, excludeKeys: Set<String> = []) -> GraphQL.SelectionSet {
         return remoteProperties
+            .filter { propertyDescription in
+                return !excludeKeys.contains(propertyDescription.graphQLPropertyName)
+            }
             .flatMap { propertyDescription -> GraphQL.Field? in
                 let remoteKey = propertyDescription.graphQLPropertyName
                 
@@ -62,7 +65,12 @@ public extension NSEntityDescription {
                             return nil
                     }
                     
+                    print("Parent:", parent)
+                    print("Destination:", destinationEntity)
+                    print("To many?", relationshipDescription.toMany)
+                    
                     let isValidRelationship = !(parent != nil && (parent == destinationEntity) && !relationshipDescription.toMany)
+                    
                     if isValidRelationship {
                         if relationshipDescription.toMany {
                             return fieldForToManyRelationship(destinationEntity, relationshipName: remoteKey, relationshipType: relationshipType, parent: self, relayConnection: relationshipDescription.graphQLRelayConnection)
