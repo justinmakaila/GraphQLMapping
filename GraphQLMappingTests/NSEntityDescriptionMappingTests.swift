@@ -20,15 +20,16 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
                 ])
             ])
         ]
-        
+
         XCTAssertTrue(userEntity.selectionSet() == userSelectionSet)
+        
         
         let dogEntity = entityForName("Dog")
         let dogSelectionSet: GraphQL.SelectionSet = [
             "name",
             GraphQL.Field(name: "owner", selectionSet: [
-                "name",
                 "age",
+                "name",
                 GraphQL.Field(name: "pets", selectionSet: [
                     GraphQL.Field(name: "edges", selectionSet: [
                         GraphQL.Field(name: "node", selectionSet: [
@@ -39,14 +40,18 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
             ])
         ]
         
+        print(dogEntity.selectionSet())
+        print(dogSelectionSet)
+        
         XCTAssertTrue(dogEntity.selectionSet() == dogSelectionSet)
+        
         
         let catEntity = entityForName("Cat")
         let catSelectionSet: GraphQL.SelectionSet = [
             "name",
             GraphQL.Field(name: "owner", selectionSet: [
-                "name",
                 "age",
+                "name",
                 GraphQL.Field(name: "pets", selectionSet: [
                     GraphQL.Field(name: "edges", selectionSet: [
                         GraphQL.Field(name: "node", selectionSet: [
@@ -58,6 +63,17 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
         ]
         
         XCTAssertTrue(catEntity.selectionSet() == catSelectionSet)
+    }
+    
+    func test_NSEntityDescriptionGraphQL_ProvidesSelectionSetExcludingKeys() {
+        let userEntity = entityForName("User")
+        
+        let userSelectionSet: GraphQL.SelectionSet = [
+            "age",
+            "name"
+        ]
+        
+        XCTAssertTrue(userEntity.selectionSet(excludeKeys: ["pets"]) == userSelectionSet)
     }
     
     func test_NSEntityDescriptionGraphQL_ProvidesDefaultFieldName() {

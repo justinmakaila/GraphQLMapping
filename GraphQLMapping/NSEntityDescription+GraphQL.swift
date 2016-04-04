@@ -11,10 +11,9 @@ protocol GraphQLRelationshipMapping {
 public protocol GraphQLEntity {
     var fieldName: String { get }
     var collectionName: String { get }
-    var selectionSet: GraphQL.SelectionSet { get }
 }
 
-private enum MappingKeys: String {
+private enum MappingKey: String {
     case RelayConnection = "GraphQL.RelayConnection"
     case FieldName = "GraphQL.FieldName"
     case CollectionName = "GraphQL.CollectionName"
@@ -22,27 +21,23 @@ private enum MappingKeys: String {
 
 extension NSPropertyDescription {
     public var graphQLPropertyName: String {
-        return userInfo?[MappingKeys.FieldName.rawValue] as? String ?? remotePropertyName
+        return userInfo?[MappingKey.FieldName.rawValue] as? String ?? remotePropertyName
     }
 }
 
 extension NSRelationshipDescription: GraphQLRelationshipMapping {
     public var graphQLRelayConnection: Bool {
-        return userInfo?[MappingKeys.RelayConnection.rawValue] != nil
+        return userInfo?[MappingKey.RelayConnection.rawValue] != nil
     }
 }
 
 extension NSEntityDescription: GraphQLEntity {
     public var fieldName: String {
-        return userInfo?[MappingKeys.FieldName.rawValue] as? String ?? managedObjectClassName.lowercaseString
+        return (userInfo?[MappingKey.FieldName.rawValue] as? String ?? name ?? managedObjectClassName).lowercaseString
     }
     
     public var collectionName: String {
-        return userInfo?[MappingKeys.CollectionName.rawValue] as? String ?? "\(fieldName)s"
-    }
-    
-    public var selectionSet: GraphQL.SelectionSet {
-        return selectionSet()
+        return userInfo?[MappingKey.CollectionName.rawValue] as? String ?? "\(fieldName)s"
     }
 }
 
@@ -61,13 +56,9 @@ public extension NSEntityDescription {
                     return GraphQL.Field(name: remoteKey)
                 } else if let relationshipDescription = propertyDescription as? NSRelationshipDescription where (relationshipType != .None) {
                     guard let destinationEntity = relationshipDescription.destinationEntity
-                        else {
-                            return nil
+                    else {
+                        return nil
                     }
-                    
-                    print("Parent:", parent)
-                    print("Destination:", destinationEntity)
-                    print("To many?", relationshipDescription.toMany)
                     
                     let isValidRelationship = !(parent != nil && (parent == destinationEntity) && !relationshipDescription.toMany)
                     
@@ -78,8 +69,6 @@ public extension NSEntityDescription {
                             return fieldForToOneRelationship(destinationEntity, relationshipName: remoteKey, relationshipType: relationshipType, parent: self)
                         }
                     }
-                    
-                    return GraphQL.Field(name: remoteKey)
                 }
                 
                 return nil
