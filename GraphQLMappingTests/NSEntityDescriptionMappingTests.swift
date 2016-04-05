@@ -40,8 +40,6 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
             ])
         ]
         
-        print(dogEntity.selectionSet())
-        print(dogSelectionSet)
         
         XCTAssertTrue(dogEntity.selectionSet() == dogSelectionSet)
         

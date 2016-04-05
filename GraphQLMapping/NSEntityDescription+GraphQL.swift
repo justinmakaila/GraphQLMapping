@@ -9,7 +9,9 @@ protocol GraphQLRelationshipMapping {
 }
 
 public protocol GraphQLEntity {
+    /// The field name representing the entity
     var fieldName: String { get }
+    /// The collection name representing a collection of entities
     var collectionName: String { get }
 }
 
@@ -43,7 +45,6 @@ extension NSEntityDescription: GraphQLEntity {
 
 public extension NSEntityDescription {
     /// Returns a selection set representing the entity.
-    /// If `parent` is provided, this method will not include any properties which reference the parent.
     func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Array, excludeKeys: Set<String> = []) -> GraphQL.SelectionSet {
         return remoteProperties
             .filter { propertyDescription in
@@ -75,10 +76,12 @@ public extension NSEntityDescription {
         }
     }
     
+    /// Returns a field representing a to-one relationship
     private func fieldForToOneRelationship(entity: NSEntityDescription, relationshipName: String, relationshipType: RelationshipType, parent: NSEntityDescription?) -> GraphQL.Field {
         return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, relationshipType: relationshipType))
     }
     
+    /// Returns a field representing a to-many relationship
     private func fieldForToManyRelationship(entity: NSEntityDescription, relationshipName: String, relationshipType: RelationshipType, parent: NSEntityDescription?, relayConnection: Bool = false) -> GraphQL.Field? {
         if relayConnection {
             return GraphQL.Field(name: relationshipName, selectionSet: [
