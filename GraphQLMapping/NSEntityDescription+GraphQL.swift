@@ -45,7 +45,7 @@ extension NSEntityDescription: GraphQLEntity {
 
 public extension NSEntityDescription {
     /// Returns a selection set representing the entity.
-    func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Array, excludeKeys: Set<String> = []) -> GraphQL.SelectionSet {
+    func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Embedded, excludeKeys: Set<String> = []) -> GraphQL.SelectionSet {
         return remoteProperties
             .filter { propertyDescription in
                 return !excludeKeys.contains(propertyDescription.graphQLPropertyName)
