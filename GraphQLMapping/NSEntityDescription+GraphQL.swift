@@ -45,7 +45,7 @@ extension NSEntityDescription: GraphQLEntity {
 
 public extension NSEntityDescription {
     /// Returns a selection set representing the entity.
-    func selectionSet(parent: NSEntityDescription? = nil, relationshipType: RelationshipType = .Embedded, excludeKeys: Set<String> = []) -> GraphQL.SelectionSet {
+    func selectionSet(parent: NSEntityDescription? = nil, includeRelationships: Bool = true, excludeKeys: Set<String> = [], customFields: [String: GraphQL.Field] = [:]) -> GraphQL.SelectionSet {
         return remoteProperties
             .filter { propertyDescription in
                 return !excludeKeys.contains(propertyDescription.graphQLPropertyName)
@@ -53,9 +53,13 @@ public extension NSEntityDescription {
             .flatMap { propertyDescription -> GraphQL.Field? in
                 let remoteKey = propertyDescription.graphQLPropertyName
                 
+                if let customField = customFields[remoteKey] {
+                    return customField
+                }
+                
                 if propertyDescription is NSAttributeDescription {
                     return GraphQL.Field(name: remoteKey)
-                } else if let relationshipDescription = propertyDescription as? NSRelationshipDescription where (relationshipType != .None) {
+                } else if let relationshipDescription = propertyDescription as? NSRelationshipDescription where (includeRelationships == true) {
                     guard let destinationEntity = relationshipDescription.destinationEntity
                     else {
                         return nil
@@ -65,9 +69,9 @@ public extension NSEntityDescription {
                     
                     if isValidRelationship {
                         if relationshipDescription.toMany {
-                            return fieldForToManyRelationship(destinationEntity, relationshipName: remoteKey, relationshipType: relationshipType, parent: self, relayConnection: relationshipDescription.graphQLRelayConnection)
+                            return fieldForToManyRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self, relayConnection: relationshipDescription.graphQLRelayConnection)
                         } else {
-                            return fieldForToOneRelationship(destinationEntity, relationshipName: remoteKey, relationshipType: relationshipType, parent: self)
+                            return fieldForToOneRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self)
                         }
                     }
                 }
@@ -77,21 +81,21 @@ public extension NSEntityDescription {
     }
     
     /// Returns a field representing a to-one relationship
-    private func fieldForToOneRelationship(entity: NSEntityDescription, relationshipName: String, relationshipType: RelationshipType, parent: NSEntityDescription?) -> GraphQL.Field {
-        return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, relationshipType: relationshipType))
+    private func fieldForToOneRelationship(entity: NSEntityDescription, relationshipName: String, includeRelationships: Bool = true, parent: NSEntityDescription?) -> GraphQL.Field {
+        return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, includeRelationships: includeRelationships))
     }
     
     /// Returns a field representing a to-many relationship
-    private func fieldForToManyRelationship(entity: NSEntityDescription, relationshipName: String, relationshipType: RelationshipType, parent: NSEntityDescription?, relayConnection: Bool = false) -> GraphQL.Field? {
+    private func fieldForToManyRelationship(entity: NSEntityDescription, relationshipName: String, includeRelationships: Bool = true, parent: NSEntityDescription?, relayConnection: Bool = false) -> GraphQL.Field? {
         if relayConnection {
             return GraphQL.Field(name: relationshipName, selectionSet: [
                     GraphQL.Field(name: "edges", selectionSet: [
-                        GraphQL.Field(name: "node", selectionSet: entity.selectionSet(parent, relationshipType: relationshipType))
+                        GraphQL.Field(name: "node", selectionSet: entity.selectionSet(parent, includeRelationships: includeRelationships))
                     ])
                 ]
             )
         } else {
-            return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, relationshipType: relationshipType))
+            return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, includeRelationships: includeRelationships))
         }
     }
 }
