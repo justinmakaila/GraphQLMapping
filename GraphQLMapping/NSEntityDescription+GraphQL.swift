@@ -19,11 +19,24 @@ private enum MappingKey: String {
     case RelayConnection = "GraphQL.RelayConnection"
     case FieldName = "GraphQL.FieldName"
     case CollectionName = "GraphQL.CollectionName"
+    case CustomSelectionSet = "GraphQL.CustomSelectionSet"
 }
 
 extension NSPropertyDescription {
     public var graphQLPropertyName: String {
         return userInfo?[MappingKey.FieldName.rawValue] as? String ?? remotePropertyName
+    }
+    
+    private var graphQLCustomSelectionSet: GraphQL.SelectionSet {
+        guard let selectionSetString = userInfo?[MappingKey.CustomSelectionSet.rawValue] as? String
+        else {
+            return []
+        }
+        
+        let components = selectionSetString.componentsSeparatedByString(" ")
+        let selectionSetComponents = Array(components.dropLast().dropFirst())
+        
+        return selectionSetComponents.map { GraphQL.Field(name: $0) }
     }
 }
 
@@ -57,8 +70,8 @@ public extension NSEntityDescription {
                     return customField
                 }
                 
-                if propertyDescription is NSAttributeDescription {
-                    return GraphQL.Field(name: remoteKey)
+                if let attributeDescription = propertyDescription as? NSAttributeDescription {
+                    return fieldForAttribute(attributeDescription)
                 } else if let relationshipDescription = propertyDescription as? NSRelationshipDescription where (includeRelationships == true) {
                     guard let destinationEntity = relationshipDescription.destinationEntity
                     else {
@@ -78,6 +91,10 @@ public extension NSEntityDescription {
                 
                 return nil
         }
+    }
+    
+    private func fieldForAttribute(attribute: NSAttributeDescription) -> GraphQL.Field {
+        return GraphQL.Field(name: attribute.graphQLPropertyName, selectionSet: attribute.graphQLCustomSelectionSet)
     }
     
     /// Returns a field representing a to-one relationship

@@ -12,6 +12,14 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
         let userSelectionSet: GraphQL.SelectionSet = [
             "address",
             "age",
+            GraphQL.Field(name: "customAddress", selectionSet: [
+                "street",
+                "street2",
+                "city",
+                "state",
+                "postalCode",
+                "country"
+            ]),
             "name",
             GraphQL.Field(name: "pets", selectionSet: [
                 GraphQL.Field(name: "edges", selectionSet: [
@@ -31,6 +39,14 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
             GraphQL.Field(name: "owner", selectionSet: [
                 "address",
                 "age",
+                GraphQL.Field(name: "customAddress", selectionSet: [
+                    "street",
+                    "street2",
+                    "city",
+                    "state",
+                    "postalCode",
+                    "country"
+                ]),
                 "name",
                 GraphQL.Field(name: "pets", selectionSet: [
                     GraphQL.Field(name: "edges", selectionSet: [
@@ -52,6 +68,14 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
             GraphQL.Field(name: "owner", selectionSet: [
                 "address",
                 "age",
+                GraphQL.Field(name: "customAddress", selectionSet: [
+                    "street",
+                    "street2",
+                    "city",
+                    "state",
+                    "postalCode",
+                    "country"
+                ]),
                 "name",
                 GraphQL.Field(name: "pets", selectionSet: [
                     GraphQL.Field(name: "edges", selectionSet: [
@@ -74,7 +98,7 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
             "name"
         ]
         
-        XCTAssertTrue(userEntity.selectionSet(excludeKeys: ["pets", "address"]) == userSelectionSet)
+        XCTAssertTrue(userEntity.selectionSet(excludeKeys: ["pets", "address", "customAddress"]) == userSelectionSet)
     }
     
     func test_NSEntityDescriptionGraphQL_ProvidesDefaultFieldName() {
@@ -108,7 +132,6 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
         let addressField = defaultSelectionSet.filter { $0.name == "address" }.first!
         XCTAssertTrue(addressField.selectionSet.isEmpty)
         
-        
         let customField = GraphQL.Field(name: "address", selectionSet: [
             "street",
             "street2",
@@ -124,5 +147,22 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
         
         let customAddressField = customSelectionSet.filter { $0.name == "address" } .first!
         XCTAssertTrue(customAddressField == customField)
+    }
+    
+    func test_NSENtityDescriptionGraphQL_ProvidesCustomFieldMappingInDataModel() {
+        let userEntity = entityForName("User")
+        let defaultSelectionSet = userEntity.selectionSet()
+        let addressField = defaultSelectionSet.filter { $0.name == "customAddress" }.first!
+        
+        let customField = GraphQL.Field(name: "customAddress", selectionSet: [
+            "street",
+            "street2",
+            "city",
+            "state",
+            "postalCode",
+            "country"
+        ])
+        
+        XCTAssertTrue(addressField == customField)
     }
 }
