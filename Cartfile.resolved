@@ -1,3 +1,3 @@
 github "soffes/ISO8601" "v0.5.0"
-github "justinmakaila/Swift-GraphQL" "f03d291b7a6efae9f981af923e358bc670313a1e"
-github "justinmakaila/RemoteMapping" "0.1.0"
+github "justinmakaila/Swift-GraphQL" "191be0826e1e8105dc2f91674250618582762ff6"
+github "justinmakaila/RemoteMapping" "0.2.2"
