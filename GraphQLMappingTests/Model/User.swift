@@ -3,10 +3,10 @@ import CoreData
 
 final class User: NSManagedObject {
     @NSManaged
-    private var addressValue: NSData
+    fileprivate var addressValue: Data
     var address: [String: String] {
         get {
-            guard let address = NSKeyedUnarchiver.unarchiveObjectWithData(addressValue) as? [String: String]
+            guard let address = NSKeyedUnarchiver.unarchiveObject(with: addressValue) as? [String: String]
             else {
                 return [:]
             }
@@ -14,7 +14,7 @@ final class User: NSManagedObject {
             return address
         }
         set {
-            addressValue = NSKeyedArchiver.archivedDataWithRootObject(newValue)
+            addressValue = NSKeyedArchiver.archivedData(withRootObject: newValue)
         }
     }
 }

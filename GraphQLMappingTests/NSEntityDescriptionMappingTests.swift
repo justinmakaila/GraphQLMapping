@@ -104,7 +104,7 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
     func test_NSEntityDescriptionGraphQL_ProvidesDefaultFieldName() {
         let dogEntity = entityForName("Dog")
         
-        XCTAssertTrue(dogEntity.fieldName.lowercaseString == "dog")
+        XCTAssertTrue(dogEntity.fieldName.lowercased() == "dog")
     }
     
     func test_NSEntityDescriptionGraphQL_ProvidesFieldName() {
@@ -116,7 +116,7 @@ class NSEntityDescriptionMappingTests: GraphQLMappingTestCase {
     func test_NSEntityDescriptionGraphQL_ProvidesDefaultCollectionName() {
         let dogEntity = entityForName("Dog")
         
-        XCTAssertTrue(dogEntity.collectionName.lowercaseString == "dogs")
+        XCTAssertTrue(dogEntity.collectionName.lowercased() == "dogs")
     }
     
     func test_NSEntityDescriptionGraphQL_ProvidesCollectionName() {

@@ -3,7 +3,7 @@ import CoreData
 
 
 private let CoreDataStoreURL = {
-    return try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true).URLByAppendingPathComponent("GraphQLMappingTests.tests")
+    return try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("GraphQLMappingTests.tests")
 }()
 
 class GraphQLMappingTestCase: XCTestCase {
@@ -15,8 +15,8 @@ class GraphQLMappingTestCase: XCTestCase {
         self.managedObjectContext = setupManagedObjectContext()
     }
     
-    func entityForName(name: String) -> NSEntityDescription {
-        guard let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: self.managedObjectContext)
+    func entityForName(_ name: String) -> NSEntityDescription {
+        guard let entity = NSEntityDescription.entity(forEntityName: name, in: self.managedObjectContext)
             else {
                 fatalError("Could not load entity")
         }
@@ -26,8 +26,8 @@ class GraphQLMappingTestCase: XCTestCase {
     
     func setupManagedObjectContext() -> NSManagedObjectContext {
         // Load the model from `Wellth.xcdatamodeld`
-        guard let modelURL = NSBundle(forClass: GraphQLMappingTestCase.self).URLForResource("GraphQLModel", withExtension: "momd"),
-            let model = NSManagedObjectModel(contentsOfURL: modelURL)
+        guard let modelURL = Bundle(for: GraphQLMappingTestCase.self).url(forResource: "GraphQLModel", withExtension: "momd"),
+            let model = NSManagedObjectModel(contentsOf: modelURL)
             else {
                 fatalError("Model not found")
         }
@@ -37,10 +37,10 @@ class GraphQLMappingTestCase: XCTestCase {
         
         // Add the `NSSQLiteStoreType` to the coordinator
         // !!!: Because there is no feasible way to handle the error, `try!` will result in a runtime error if this operation fails.
-        try! persistentStoreCoordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: CoreDataStoreURL, options: nil)
+        try! persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: CoreDataStoreURL, options: nil)
         
         // Create the `NSManagedObjectContext`
-        let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         
         return context
