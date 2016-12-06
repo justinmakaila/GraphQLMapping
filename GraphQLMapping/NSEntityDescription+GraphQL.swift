@@ -81,11 +81,9 @@ public extension NSEntityDescription {
                     let isValidRelationship = !(parent != nil && (parent == destinationEntity) && !relationshipDescription.isToMany)
                     
                     if isValidRelationship {
-                        if relationshipDescription.isToMany {
-                            return fieldForToManyRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self, relayConnection: relationshipDescription.graphQLRelayConnection)
-                        } else {
-                            return fieldForToOneRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self)
-                        }
+                        return relationshipDescription.isToMany
+                            ? fieldForToManyRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self, relayConnection: relationshipDescription.graphQLRelayConnection)
+                            : fieldForToOneRelationship(destinationEntity, relationshipName: remoteKey, includeRelationships: includeRelationships, parent: self)
                     }
                 }
                 
@@ -114,5 +112,15 @@ public extension NSEntityDescription {
         } else {
             return GraphQL.Field(name: relationshipName, selectionSet: entity.selectionSet(parent, includeRelationships: includeRelationships))
         }
+    }
+}
+
+extension NSManagedObject: GraphQLEntity {
+    public var fieldName: String {
+        return entity.fieldName
+    }
+    
+    public var collectionName: String {
+        return entity.collectionName
     }
 }
